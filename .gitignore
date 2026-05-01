@@ -1,0 +1,85 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Variables de entorno y secretos (NO subir nunca)
+.env
+.env.local
+*.key
+secrets/
+credentials.json
+
+# Modelos entrenados (pesados, usar Git LFS o link externo)
+*.pkl
+*.pt
+*.pth
+*.h5
+*.onnx
+ia_models/**/checkpoints/
+ia_models/**/saved_models/
+
+# Datasets reales (subir solo sintéticos / anonimizados)
+datos/raw/*
+!datos/raw/README.md
+datos/private/
+
+# Logs y outputs temporales
+logs/
+*.log
+output/
+temp/
+
+# Cache de tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Bases de datos locales
+*.sqlite
+*.db
+
+# Node modules (si frontend usa npm)
+node_modules/
+package-lock.json
+
+# Archivos del SO
+.DS_Store
+desktop.ini

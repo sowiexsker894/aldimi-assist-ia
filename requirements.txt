@@ -1,0 +1,42 @@
+# ===== Core =====
+python-dotenv==1.0.0
+
+# ===== Backend / API =====
+fastapi==0.110.0
+uvicorn[standard]==0.27.0
+pydantic==2.6.0
+python-multipart==0.0.9
+
+# ===== Visión Artificial =====
+opencv-python==4.9.0.80
+pytesseract==0.3.10
+easyocr==1.7.1
+Pillow==10.2.0
+
+# ===== Deep Learning (descomentar según se use) =====
+# torch==2.2.0
+# torchvision==0.17.0
+# tensorflow==2.15.0
+
+# ===== NLP =====
+spacy==3.7.2
+nltk==3.8.1
+sentence-transformers==2.5.1
+# langchain==0.1.0  # descomentar si se usa
+
+# ===== Bases de datos =====
+psycopg2-binary==2.9.9       # PostgreSQL
+pymongo==4.6.2               # MongoDB
+sqlalchemy==2.0.27
+
+# ===== Utilidades =====
+faker==24.0.0                # Para generar datos sintéticos
+numpy==1.26.4
+pandas==2.2.0
+matplotlib==3.8.3
+seaborn==0.13.2
+
+# ===== Testing =====
+pytest==8.0.0
+pytest-asyncio==0.23.5
+httpx==0.27.0
