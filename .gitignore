@@ -83,3 +83,5 @@ package-lock.json
 # Archivos del SO
 .DS_Store
 desktop.ini
+
+.cursor/
