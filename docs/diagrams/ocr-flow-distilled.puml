@@ -1,0 +1,21 @@
+@startuml
+title Pipeline de Visión Artificial - ALDIMI-Assist
+
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam roundcorner 20
+
+participant "Imagen\nEntrada" as In
+participant "**Pre-procesamiento**\n(OpenCV)" as Pre
+participant "**Clasificación**\n(DNI vs Receta)" as Class
+participant "**Extracción**\n(OCR Engine)" as Ext
+participant "**Integración**\n(Backend & DB)" as Int
+
+In -> Pre : Carga de imagen
+Pre -> Class : Imagen limpia\n(Binarizada)
+Class -> Ext : Tipo de doc.\nidentificado
+Ext -> Int : JSON con\ndatos extraídos
+Int -> Int : Persistencia\n(SQL/NoSQL)
+
+note right of Int: Almacenamiento en\nPostgreSQL y MongoDB
+@enduml

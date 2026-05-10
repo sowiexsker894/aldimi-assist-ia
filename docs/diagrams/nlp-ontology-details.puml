@@ -1,0 +1,55 @@
+@startuml
+title Ontología de Conocimiento - ALDIMI-Assist
+
+package "Actores" {
+    class Usuario {
+        +String nombre
+        +String dni
+    }
+    class Albergado extends Usuario {
+        +String diagnostico
+        +DateTime fechaIngreso
+    }
+    class Voluntario extends Usuario {
+        +int horasSemanales
+    }
+}
+
+package "Documentación (OCR)" {
+    class Documento {
+        +DateTime fechaEmision
+        +String estado
+    }
+    class DNI extends Documento {
+        +String dniNumber
+        +String patientName
+        +Date fechaEmision
+        +Date fechaVencimiento
+
+    }
+    class RecetaMedica extends Documento {
+        +String hospitalOrigen
+        +String medicamentos
+    }
+}
+
+package "Normativa" {
+    class Reglamento {
+        +String version
+    }
+    class Regla {
+        +String descripcion
+        +String categoria
+    }
+}
+
+' Relaciones
+Albergado "1" *-- "1..*" Documento : "debe presentar"
+Reglamento "1" *-- "many" Regla : "contiene"
+Usuario ..> Reglamento : "debe cumplir"
+Voluntario "1" -- "many" Albergado : "asiste a"
+
+note right of Albergado : Solo pacientes con cáncer\ny un familiar
+note bottom of Regla : Ej: Prohibida la salida\nsalvo emergencias
+
+@enduml

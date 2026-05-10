@@ -1,0 +1,38 @@
+@startuml
+title Grafo de Ontología  - ALDIMI-Assist
+
+' Configuración de estilo
+skinparam backgroundcolor transparent
+skinparam node {
+    BackgroundColor #E1F5FE
+    BorderColor #01579B
+}
+skinparam arrowhead 3
+
+' Definición de Nodos
+node "Albergado" as Paciente
+node "Familiar" as Familiar
+node "Voluntario" as Voluntario
+node "Reglamento Interno" as Reglamento
+node "Documento" as Doc
+node "Libro de Registro" as Registro
+node "Administración" as Admin
+
+' Relaciones
+Paciente -down-> Doc : "debe presentar"
+Familiar -down-> Doc : "debe presentar"
+
+Voluntario -right-> Paciente : "brinda acompañamiento a"
+Familiar -left-> Paciente : "cuida de"
+
+Reglamento -down-> Paciente : "rige conducta de"
+Reglamento -down-> Voluntario : "rige funciones de"
+
+Paciente -up-> Registro : "debe inscribirse en"
+Familiar -up-> Registro : "debe inscribirse en"
+
+Admin -left-> Reglamento : "actualiza y supervisa"
+Admin -down-> Voluntario : "coordina con"
+
+
+@enduml

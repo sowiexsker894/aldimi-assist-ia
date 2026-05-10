@@ -1,0 +1,39 @@
+@startuml
+title Flujo de Procesamiento de Visión Artificial - ALDIMI-Assist
+
+skinparam ActivityBackgroundColor #FEFECE
+skinparam ActivityBorderColor #A80036
+skinparam ArrowColor #A80036
+
+start
+
+:Usuario sube imagen del documento\n(DNI / Receta Médica);
+
+partition "Preprocesamiento (OpenCV)" {
+    :Convertir a Escala de Grises;
+    :Aplicar Umbralización (Binarización);
+    :Eliminación de Ruido (Noise Removal);
+}
+
+partition "Clasificación" {
+    :Detección de Patrones / Red Neuronal;
+    if (¿Es DNI o Receta?) then (DNI)
+        :Setear campos: Nombre, DNI, Fecha Nacimiento;
+    else (Receta)
+        :Setear campos: Medicamento, Hospital, Fecha Vencimiento;
+    endif
+}
+
+partition "Extracción (OCR - Tesseract/EasyOCR)" {
+    :Ejecutar motor OCR en regiones de interés (ROI);
+    :Post-procesamiento de texto (Limpieza de caracteres);
+}
+
+partition "Integración y Persistencia" {
+    :Validar Datos (Contrato de Interfaz);
+    :Enviar JSON al Core Backend (FastAPI);
+    :Guardar en PostgreSQL (Datos Estructurados);
+}
+
+stop
+@enduml

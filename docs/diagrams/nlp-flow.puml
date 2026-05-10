@@ -1,0 +1,31 @@
+@startuml
+title Flujo de Diálogo: Consulta de Salida del Albergue
+
+start
+:Usuario realiza consulta:
+"¿Puedo salir a comprar algo?"|
+
+:NLP: Identificar Intención (Consulta_Reglamento);
+:NLP: Extraer Entidad (Acción: Salir);
+
+if (¿Usuario es Albergado/Familiar?) then (Sí)
+    :Consultar Base de Conocimientos:
+    Regla 11: Salidas Prohibidas[cite: 1];
+
+    if (¿Es cita médica o emergencia?) then (No)
+        :Generar Respuesta Equilibrada:
+        "La salida no está permitida según el
+        reglamento, salvo emergencias médicas."|
+        :Registrar evento en MongoDB
+        (Categoría: Intento de Incumplimiento);
+    else (Sí)
+        :Indicar procedimiento de registro
+        en el libro de salidas[cite: 1];
+    endif
+else (No/Voluntario)
+    :Informar sobre coordinación con
+    la administración;
+endif
+
+stop
+@enduml
