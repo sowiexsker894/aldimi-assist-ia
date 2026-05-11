@@ -1,0 +1,19 @@
+# Usar Python 3.11–3.13 recomendado. En 3.14, pydantic-core puede fallar al compilar (PyO3).
+# FastAPI API central (service-core) — ver .cursor/rules/architecture.mdc
+fastapi>=0.115.0,<0.116.0
+uvicorn[standard]>=0.32.0,<0.33.0
+
+# Data layer
+sqlalchemy>=2.0.36,<2.1.0
+psycopg[binary]>=3.2.0,<3.3.0
+alembic>=1.14.0,<1.15.0
+
+# Config & validation
+pydantic>=2.10.0,<2.12.0
+pydantic-settings>=2.6.0,<2.8.0
+
+# Security (reglas de proyecto: passlib bcrypt)
+passlib[bcrypt]>=1.7.4,<1.8.0
+
+# Integración futura con microservicios IA
+httpx>=0.28.0,<0.29.0
