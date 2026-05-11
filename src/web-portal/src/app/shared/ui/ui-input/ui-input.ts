@@ -13,6 +13,7 @@ export class UiInput {
   readonly placeholder = input('');
   readonly type = input('text');
   readonly errorMessage = input<string | null>(null);
+  readonly disabled = input(false);
 
   protected onInput(ev: Event): void {
     const el = ev.target as HTMLInputElement;

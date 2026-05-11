@@ -7,3 +7,6 @@ pydantic-settings>=2.6.0,<2.8.0
 
 # Llamadas futuras a service-core u otros servicios
 httpx>=0.28.0,<0.29.0
+
+# Azure OpenAI (endpoint /openai/v1 compatible con OpenAI SDK)
+openai>=1.59.0,<2.0.0
