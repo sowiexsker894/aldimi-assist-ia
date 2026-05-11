@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+@theme {
+  /* ALDIMI brand (reference: logo + landing) */
+  --color-brand-red: rgb(197 45 24);
+  --color-brand-navy: rgb(3 35 84);
+  --color-brand-muted: rgb(155 159 171);
+  --color-brand-deep: rgb(12 36 68);
+
+  /* Semantic tokens */
+  --color-primary: var(--color-brand-navy);
+  --color-accent: var(--color-brand-red);
+  --color-muted-foreground: var(--color-brand-muted);
+  --color-surface-dark: var(--color-brand-deep);
+  --color-surface: rgb(248 250 252);
+  --color-surface-elevated: rgb(255 255 255);
+  --color-foreground: var(--color-brand-deep);
+  --color-border: rgb(226 232 240);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+
+  --radius-lg: 0.5rem;
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+}

@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-1.5">
+  <label class="text-sm font-medium text-foreground" [attr.for]="inputId()">
+    {{ label() }}
+  </label>
+  <input
+    class="w-full rounded-lg border border-border bg-surface-elevated px-3 py-2 text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+    [class.ring-2]="errorMessage()"
+    [class.ring-accent]="errorMessage()"
+    [id]="inputId()"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInput($event)"
+  />
+  @if (errorMessage()) {
+    <p class="text-sm text-accent" role="alert">{{ errorMessage() }}</p>
+  }
+</div>

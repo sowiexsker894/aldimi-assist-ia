@@ -1,0 +1,12 @@
+<div
+  class="rounded-lg border border-border bg-surface-elevated shadow-[var(--shadow-card)]"
+>
+  @if (title()) {
+    <div class="border-border border-b px-5 py-4">
+      <h2 class="text-base font-semibold text-foreground">{{ title() }}</h2>
+    </div>
+  }
+  <div [class]="bodyPaddingClass()">
+    <ng-content />
+  </div>
+</div>
