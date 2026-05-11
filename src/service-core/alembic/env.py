@@ -9,7 +9,14 @@ from sqlalchemy import engine_from_config, pool
 
 from app.core.config import get_settings
 from app.domain.base import Base
-from app.domain.entities.patient import Patient  # noqa: F401
+from app.domain.entities import (  # noqa: F401
+    MenuItem,
+    MenuItemRoleRow,
+    Patient,
+    User,
+    UserPatientRow,
+    UserRoleRow,
+)
 
 config = context.config
 if config.config_file_name is not None:

@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+.shell__aside {
+  position: relative;
+  width: 15rem;
+  background: linear-gradient(
+    165deg,
+    var(--color-brand-deep) 0%,
+    rgb(8 47 73) 45%,
+    var(--color-brand-navy) 100%
+  );
+}
+
+.shell__aside--narrow {
+  width: 4.25rem;
+}
+
+.shell__aside--narrow .shell__aside-header {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.shell__collapse-toggle {
+  position: absolute;
+  z-index: 1;
+  top: 0.5rem;
+  right: 0.35rem;
+}
+
+.shell__aside--narrow .shell__collapse-toggle {
+  right: 0.25rem;
+}
+
+.shell__aside-header {
+  position: relative;
+  padding-top: 2rem;
+}
+
+.shell__aside--narrow .shell__aside-header {
+  padding-top: 2.25rem;
+}
+
+.shell__logout-btn {
+  border: none;
+  cursor: pointer;
+}

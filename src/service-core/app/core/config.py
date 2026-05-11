@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     nlp_service_url: str = ""
     vision_service_url: str = ""
     cors_origins: str = "http://localhost:4200"
+    jwt_secret: str = "change-me-in-production"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60 * 24
 
     @property
     def cors_origins_list(self) -> list[str]:

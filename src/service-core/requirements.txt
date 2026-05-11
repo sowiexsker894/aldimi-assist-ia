@@ -12,8 +12,12 @@ alembic>=1.14.0,<1.15.0
 pydantic>=2.10.0,<2.12.0
 pydantic-settings>=2.6.0,<2.8.0
 
-# Security (reglas de proyecto: passlib bcrypt)
-passlib[bcrypt]>=1.7.4,<1.8.0
+# Security: bcrypt oficial (hashpw / checkpw); no passlib
+bcrypt>=4.0.1,<5
 
 # Integración futura con microservicios IA
 httpx>=0.28.0,<0.29.0
+
+# JWT
+PyJWT>=2.9.0,<3.0.0
+

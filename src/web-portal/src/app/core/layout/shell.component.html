@@ -1,0 +1,74 @@
+<div class="shell flex min-h-dvh bg-surface">
+  <aside
+    class="shell__aside flex shrink-0 flex-col border-r border-white/10 text-white shadow-[4px_0_24px_-8px_rgba(12,36,68,0.25)] transition-[width] duration-200 ease-out"
+    [class.shell__aside--narrow]="sidebarCollapsed()"
+    [attr.aria-expanded]="!sidebarCollapsed()"
+  >
+    <button
+      type="button"
+      class="shell__collapse-toggle rounded-md p-1.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+      (click)="toggleSidebar()"
+      [attr.aria-expanded]="!sidebarCollapsed()"
+      [attr.aria-label]="sidebarCollapsed() ? 'Expandir menú' : 'Contraer menú'"
+    >
+      @if (sidebarCollapsed()) {
+        <span class="text-base leading-none" aria-hidden="true">»</span>
+      } @else {
+        <span class="text-base leading-none" aria-hidden="true">«</span>
+      }
+    </button>
+    <div
+      class="shell__aside-header border-b border-white/10 bg-gradient-to-b from-primary/35 to-transparent px-3 py-4"
+    >
+      <div class="flex w-full flex-col items-center gap-2 text-center">
+        @if (!sidebarCollapsed()) {
+          <p
+            class="max-w-full text-[0.65rem] font-semibold uppercase tracking-widest text-white/55"
+          >
+            ALDIMI-Assist
+          </p>
+        }
+        <div
+          class="shell__logo flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary via-primary to-surface-dark text-sm font-bold text-white shadow-lg ring-2 ring-white/20"
+          aria-hidden="true"
+        >
+          A
+        </div>
+        @if (!sidebarCollapsed()) {
+          <div class="max-w-full px-1">
+            <p class="truncate text-sm font-medium text-white/95">
+              {{ user()?.full_name }}
+            </p>
+            <p class="truncate text-xs text-white/55">{{ user()?.email }}</p>
+          </div>
+        }
+      </div>
+    </div>
+    <nav class="shell__nav flex-1 overflow-y-auto overflow-x-hidden p-2" aria-label="Menú principal">
+      <app-shell-nav-item [items]="menu()" [collapsed]="sidebarCollapsed()" />
+    </nav>
+    <div class="border-t border-white/10 p-2">
+      @if (sidebarCollapsed()) {
+        <button
+          type="button"
+          class="shell__logout-btn w-full rounded-lg bg-white px-2 py-2 text-[0.65rem] font-semibold uppercase leading-tight tracking-wide text-foreground shadow-sm transition-colors hover:bg-white/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          (click)="logout()"
+          title="Cerrar sesión"
+        >
+          Salir
+        </button>
+      } @else {
+        <button
+          type="button"
+          class="shell__logout-btn w-full rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-white/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+          (click)="logout()"
+        >
+          Cerrar sesión
+        </button>
+      }
+    </div>
+  </aside>
+  <div class="flex min-w-0 flex-1 flex-col">
+    <router-outlet />
+  </div>
+</div>

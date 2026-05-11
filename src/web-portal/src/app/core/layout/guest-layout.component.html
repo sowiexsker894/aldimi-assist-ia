@@ -1,0 +1,29 @@
+<div class="guest flex min-h-dvh flex-col bg-surface">
+  <header
+    class="guest__header flex shrink-0 items-center justify-between gap-4 border-b border-border bg-surface-elevated px-4 py-3 shadow-sm"
+  >
+    <div class="flex items-center gap-3">
+      <div
+        class="guest__logo-placeholder flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-surface-dark text-sm font-bold text-white shadow-md"
+        aria-hidden="true"
+      >
+        A
+      </div>
+      <div>
+        <p class="text-sm font-semibold tracking-tight text-foreground">
+          ALDIMI-Assist
+        </p>
+        <p class="text-xs text-muted-foreground">Modo invitado</p>
+      </div>
+    </div>
+    <a
+      routerLink="/login"
+      class="rounded-lg border border-primary bg-transparent px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+    >
+      Iniciar sesión
+    </a>
+  </header>
+  <main class="min-h-0 flex-1">
+    <router-outlet />
+  </main>
+</div>

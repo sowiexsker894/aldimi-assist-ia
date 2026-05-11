@@ -7,7 +7,11 @@ from app.core.config import get_settings
 
 def create_app() -> FastAPI:
     settings = get_settings()
-    application = FastAPI(title=settings.project_name)
+    application = FastAPI(
+        title=settings.project_name,
+        description="API central ALDIMI-Assist (FastAPI + capas). Incluye documentación OpenAPI.",
+        version="0.1.0",
+    )
 
     application.add_middleware(
         CORSMiddleware,
