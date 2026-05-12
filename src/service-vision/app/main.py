@@ -9,7 +9,7 @@ def create_app() -> FastAPI:
     settings = get_settings()
     application = FastAPI(
         title=settings.project_name,
-        description="Microservicio de visión (ALDIMI-Assist). Stub inicial.",
+        description="Microservicio de visión (ALDIMI-Assist): DNI peruano con OpenCV y Azure multimodal.",
         version="0.1.0",
     )
 
