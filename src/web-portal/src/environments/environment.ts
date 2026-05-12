@@ -4,4 +4,5 @@ export const environment: AppEnvironment = {
   production: false,
   apiBaseUrl: '',
   nlpApiBaseUrl: '',
+  visionApiBaseUrl: '',
 };

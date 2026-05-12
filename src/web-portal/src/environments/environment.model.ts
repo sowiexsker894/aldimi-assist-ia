@@ -7,4 +7,8 @@ export interface AppEnvironment {
    * En producción: URL absoluta si el NLP está en otro host.
    */
   nlpApiBaseUrl: string;
+  /**
+   * Base del microservicio de visión (sin barra final). Vacío = rutas relativas `/vision/...` vía proxy.
+   */
+  visionApiBaseUrl: string;
 }
