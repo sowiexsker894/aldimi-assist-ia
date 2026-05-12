@@ -1,0 +1,118 @@
+<section class="mx-auto h-[calc(100dvh-4.5rem)] min-h-0 max-w-3xl p-4 md:p-6">
+  <div
+    class="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-surface-elevated shadow-[var(--shadow-card)]"
+  >
+    <header class="shrink-0 border-b border-border bg-surface-elevated px-4 py-4 md:px-5">
+      <div class="mb-2 h-1 w-10 rounded-full bg-accent" aria-hidden="true"></div>
+      <h2 class="text-base font-semibold tracking-tight text-foreground md:text-lg">
+        Asistente de información
+      </h2>
+      <p class="mt-1 max-w-xl text-sm text-muted-foreground">
+        Preguntas sobre trámites, reglamentos y el ecosistema ALDIMI. Respuestas orientativas;
+        no sustituyen la normativa oficial.
+      </p>
+    </header>
+
+    <div
+      #chatScroll
+      class="guest-chat__messages min-h-0 flex-1 space-y-4 overflow-y-auto bg-surface px-4 py-4 md:px-5"
+      role="log"
+      aria-live="polite"
+      aria-relevant="additions"
+    >
+      @if (transcript().length === 0 && !loading()) {
+        <div
+          class="flex flex-col items-center justify-center gap-3 px-2 py-10 text-center md:py-14"
+        >
+          <div
+            class="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-lg font-semibold text-primary shadow-sm"
+            aria-hidden="true"
+          >
+            IA
+          </div>
+          <div>
+            <p class="text-sm font-medium text-foreground">¿En qué podemos ayudarte?</p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              Escribe abajo y el asistente responderá con la información disponible.
+            </p>
+          </div>
+        </div>
+      }
+
+      @for (line of transcript(); track $index) {
+        @if (line.role === 'user') {
+          <div class="flex justify-end">
+            <div class="flex max-w-[min(100%,28rem)] flex-col items-end gap-1">
+              <span class="px-1 text-xs font-medium text-muted-foreground">Tú</span>
+              <div
+                class="rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-relaxed text-white shadow-sm"
+              >
+                {{ line.text }}
+              </div>
+            </div>
+          </div>
+        } @else {
+          <div class="flex justify-start">
+            <div class="flex max-w-[min(100%,28rem)] flex-col items-start gap-1">
+              <span class="px-1 text-xs font-medium text-muted-foreground">Asistente</span>
+              <div
+                class="rounded-2xl rounded-bl-md border border-border bg-surface-elevated px-4 py-2.5 text-sm leading-relaxed text-foreground shadow-[var(--shadow-card)]"
+              >
+                {{ line.text }}
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      @if (loading()) {
+        <div class="flex justify-start">
+          <div class="flex max-w-[min(100%,28rem)] flex-col items-start gap-1">
+            <span class="px-1 text-xs font-medium text-muted-foreground">Asistente</span>
+            <div
+              class="flex items-center gap-3 rounded-2xl rounded-bl-md border border-border bg-surface-elevated px-4 py-3 shadow-[var(--shadow-card)]"
+              aria-hidden="true"
+            >
+              <span class="guest-chat__dot h-2 w-2 shrink-0 rounded-full bg-primary"></span>
+              <span
+                class="guest-chat__dot guest-chat__dot--2 h-2 w-2 shrink-0 rounded-full bg-primary"
+              ></span>
+              <span
+                class="guest-chat__dot guest-chat__dot--3 h-2 w-2 shrink-0 rounded-full bg-primary"
+              ></span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (error()) {
+      <div
+        class="shrink-0 border-t border-border bg-surface-elevated px-4 py-3 md:px-5"
+        role="alert"
+      >
+        <p
+          class="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        >
+          {{ error() }}
+        </p>
+      </div>
+    }
+
+    <footer class="shrink-0 border-t border-border bg-surface-elevated px-4 py-4 md:px-5 md:py-5">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+        <app-ui-input
+          class="min-w-0 flex-1"
+          label="Tu mensaje"
+          inputId="guest-chat-input"
+          placeholder="Ej.: ¿Cómo accedo a los trámites de ALDIMI?"
+          [disabled]="loading()"
+          [(value)]="draft"
+        />
+        <app-ui-button variant="primary" [disabled]="loading()" (clicked)="send()">
+          {{ loading() ? 'Enviando…' : 'Enviar' }}
+        </app-ui-button>
+      </div>
+    </footer>
+  </div>
+</section>
