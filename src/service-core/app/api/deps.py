@@ -11,9 +11,19 @@ from app.domain.enums import UserRole
 from app.infrastructure.clients.nlp_http_client import NlpHttpClient
 from app.infrastructure.clients.vision_http_client import VisionHttpClient
 from app.infrastructure.persistence.session import get_db
+from app.infrastructure.repositories.document_repository import (
+    AnalysisSessionRepository,
+    DocumentRepository,
+)
 from app.infrastructure.repositories.patient_repository import PatientRepository
+from app.infrastructure.repositories.prescription_repository import PrescriptionRepository
+from app.infrastructure.repositories.receipt_repository import ReceiptRepository
+from app.infrastructure.repositories.sentiment_repository import SentimentReportRepository
 from app.infrastructure.repositories.user_repository import MenuRepository, UserRepository
 from app.services.auth_service import AdminVolunteerService, AuthService
+from app.services.daily_report_service import DailyReportService
+from app.services.patient_family_service import PatientFamilyService
+from app.services.document_service import DocumentService
 from app.services.patient_service import PatientService
 
 security = HTTPBearer()
@@ -95,4 +105,66 @@ def get_patient_service(
     vision: Annotated[VisionHttpClient, Depends(get_vision_http_client)],
 ) -> PatientService:
     return PatientService(repo, nlp, vision)
+
+
+def get_analysis_session_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> AnalysisSessionRepository:
+    return AnalysisSessionRepository(db)
+
+
+def get_document_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> DocumentRepository:
+    return DocumentRepository(db)
+
+
+def get_prescription_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> PrescriptionRepository:
+    return PrescriptionRepository(db)
+
+
+def get_receipt_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> ReceiptRepository:
+    return ReceiptRepository(db)
+
+
+def get_sentiment_report_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> SentimentReportRepository:
+    return SentimentReportRepository(db)
+
+
+def get_daily_report_service(
+    patient_repo: Annotated[PatientRepository, Depends(get_patient_repository)],
+    report_repo: Annotated[SentimentReportRepository, Depends(get_sentiment_report_repository)],
+) -> DailyReportService:
+    return DailyReportService(patient_repo, report_repo)
+
+
+def get_patient_family_service(
+    patient_repo: Annotated[PatientRepository, Depends(get_patient_repository)],
+    users: Annotated[UserRepository, Depends(get_user_repository)],
+) -> PatientFamilyService:
+    return PatientFamilyService(patient_repo, users)
+
+
+def get_document_service(
+    patient_repo: Annotated[PatientRepository, Depends(get_patient_repository)],
+    session_repo: Annotated[AnalysisSessionRepository, Depends(get_analysis_session_repository)],
+    document_repo: Annotated[DocumentRepository, Depends(get_document_repository)],
+    vision: Annotated[VisionHttpClient, Depends(get_vision_http_client)],
+    prescription_repo: Annotated[PrescriptionRepository, Depends(get_prescription_repository)],
+    receipt_repo: Annotated[ReceiptRepository, Depends(get_receipt_repository)],
+) -> DocumentService:
+    return DocumentService(
+        patient_repo,
+        session_repo,
+        document_repo,
+        vision,
+        prescription_repo,
+        receipt_repo,
+    )
 

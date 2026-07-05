@@ -29,8 +29,8 @@ def probe_vision(
     vision: Annotated[VisionHttpClient, Depends(get_vision_http_client)],
 ) -> dict[str, str | bool]:
     try:
-        detail = vision.extract_document_text("demo://placeholder")
-        return {"service": "vision", "ok": True, "detail": detail}
+        detail = vision.ping()
+        return {"service": "vision", "ok": True, "detail": str(detail)}
     except ExternalServiceUnavailable as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

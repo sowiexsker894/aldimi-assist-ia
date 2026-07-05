@@ -1,6 +1,6 @@
-<div class="shell flex min-h-dvh bg-surface">
+<div class="shell flex h-dvh overflow-hidden bg-surface">
   <aside
-    class="shell__aside flex shrink-0 flex-col border-r border-white/10 text-white shadow-[4px_0_24px_-8px_rgba(12,36,68,0.25)] transition-[width] duration-200 ease-out"
+    class="shell__aside flex h-full min-h-0 shrink-0 flex-col border-r border-white/10 text-white shadow-[4px_0_24px_-8px_rgba(12,36,68,0.25)] transition-[width] duration-200 ease-out"
     [class.shell__aside--narrow]="sidebarCollapsed()"
     [attr.aria-expanded]="!sidebarCollapsed()"
   >
@@ -44,7 +44,7 @@
         }
       </div>
     </div>
-    <nav class="shell__nav flex-1 overflow-y-auto overflow-x-hidden p-2" aria-label="Menú principal">
+    <nav class="shell__nav min-h-0 flex-1 overflow-y-auto overflow-x-hidden p-2" aria-label="Menú principal">
       <app-shell-nav-item [items]="menu()" [collapsed]="sidebarCollapsed()" />
     </nav>
     <div class="border-t border-white/10 p-2">
@@ -68,7 +68,7 @@
       }
     </div>
   </aside>
-  <div class="flex min-w-0 flex-1 flex-col">
+  <main class="shell__main min-h-0 min-w-0 flex-1 overflow-y-auto">
     <router-outlet />
-  </div>
+  </main>
 </div>

@@ -7,15 +7,16 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { UiButton, UiInput } from '../../shared/ui';
+import { MarkdownComponent } from 'ngx-markdown';
 
+import { UiButton, UiInput } from '../../shared/ui';
 import { NlpChatHistoryItem, NlpChatService } from '../../core/services/nlp-chat.service';
 
 type TranscriptLine = { role: 'user' | 'assistant'; text: string };
 
 @Component({
   selector: 'app-guest-chat',
-  imports: [UiButton, UiInput],
+  imports: [UiButton, UiInput, MarkdownComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './guest-chat.component.html',
   styleUrl: './guest-chat.component.scss',

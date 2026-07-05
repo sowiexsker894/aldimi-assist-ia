@@ -10,6 +10,8 @@ from sqlalchemy import engine_from_config, pool
 from app.core.config import get_settings
 from app.domain.base import Base
 from app.domain.entities import (  # noqa: F401
+    AnalysisSession,
+    Document,
     MenuItem,
     MenuItemRoleRow,
     Patient,

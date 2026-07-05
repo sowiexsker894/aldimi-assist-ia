@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { apiUrl } from '../../core/config/api-url';
 import { UiCard } from '../../shared/ui';
@@ -7,11 +8,12 @@ import { UiCard } from '../../shared/ui';
 export interface PatientRow {
   id: number;
   full_name: string;
+  dni: string | null;
 }
 
 @Component({
   selector: 'app-patients-list',
-  imports: [UiCard],
+  imports: [RouterLink, UiCard],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="p-6">
@@ -25,9 +27,20 @@ export interface PatientRow {
         } @else {
           <ul class="divide-y divide-border rounded-md border border-border">
             @for (p of rows(); track p.id) {
-              <li class="flex items-center justify-between px-4 py-3 text-sm">
-                <span class="font-medium text-foreground">{{ p.full_name }}</span>
-                <span class="text-muted-foreground">#{{ p.id }}</span>
+              <li>
+                <a
+                  [routerLink]="['/app/pacientes', p.id]"
+                  class="flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-muted/40"
+                >
+                  <span class="font-medium text-foreground">{{ p.full_name }}</span>
+                  <span class="text-muted-foreground">
+                    @if (p.dni) {
+                      DNI {{ p.dni }}
+                    } @else {
+                      #{{ p.id }}
+                    }
+                  </span>
+                </a>
               </li>
             }
           </ul>

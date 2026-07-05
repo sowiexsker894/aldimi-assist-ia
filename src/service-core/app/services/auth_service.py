@@ -60,6 +60,8 @@ class AdminVolunteerService:
         email: str,
         password: str,
         full_name: str,
+        phone: str | None = None,
+        document_number: str | None = None,
     ) -> User:
         if UserRole.ADMIN.value not in {r.role for r in actor.roles}:
             raise ForbiddenActionError("Solo administradores pueden crear voluntarios.")
@@ -70,8 +72,35 @@ class AdminVolunteerService:
             email=email_norm,
             hashed_password=hash_password(password),
             full_name=full_name.strip(),
+            phone=phone.strip() if phone else None,
+            document_number=document_number.strip() if document_number else None,
             is_active=True,
         )
         user.roles.append(UserRoleRow(role=UserRole.VOLUNTEER.value))
         self._users.add(user)
         return user
+
+    def list_volunteers(self, actor: User) -> list[User]:
+        if UserRole.ADMIN.value not in {r.role for r in actor.roles}:
+            raise ForbiddenActionError("Solo administradores pueden listar voluntarios.")
+        return self._users.list_by_role(UserRole.VOLUNTEER.value)
+
+    def set_volunteer_active(
+        self,
+        *,
+        actor: User,
+        user_id: int,
+        is_active: bool,
+    ) -> User:
+        if UserRole.ADMIN.value not in {r.role for r in actor.roles}:
+            raise ForbiddenActionError("Solo administradores pueden modificar voluntarios.")
+        if actor.id == user_id:
+            raise ValueError("No puede desactivar su propia cuenta.")
+        user = self._users.get_by_id(user_id)
+        if user is None:
+            raise ValueError("Usuario no encontrado.")
+        if UserRole.VOLUNTEER.value not in {r.role for r in user.roles}:
+            raise ValueError("El usuario no es un voluntario.")
+        updated = self._users.set_active(user_id, is_active)
+        assert updated is not None
+        return updated

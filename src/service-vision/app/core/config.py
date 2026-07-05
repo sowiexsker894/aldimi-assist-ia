@@ -18,6 +18,8 @@ class Settings(BaseSettings):
 
     llm_provider: Literal["stub", "azure"] = "azure"
 
+    gatekeeper_provider: Literal["stub"] = "stub"
+
     openai_base_url: str = ""
     openai_api_key: str = ""
     openai_vision_model: str = ""
@@ -31,6 +33,8 @@ class Settings(BaseSettings):
 
     # Vacío = usa `dni_extractor_system_prompt.DNI_EXTRACTOR_SYSTEM_PROMPT`
     dni_system_prompt: str = ""
+    receta_system_prompt: str = ""
+    recibo_system_prompt: str = ""
 
     @property
     def cors_origins_list(self) -> list[str]:

@@ -1,0 +1,122 @@
+@if (phase() === 'upload') {
+  <app-ui-card
+    [title]="compact() ? 'Escanear DNI' : 'Documento de identidad (DNI)'"
+    [padding]="'md'"
+  >
+    <p class="mb-4 text-sm leading-relaxed text-muted-foreground">
+      Adjunte una o más fotos claras del DNI (anverso y reverso).
+    </p>
+
+    <app-document-upload
+      [disabled]="loading.visible()"
+      (imagesSelected)="onImagesSelected($event)"
+    />
+
+    @if (error()) {
+      <p
+        class="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        role="alert"
+      >
+        {{ error() }}
+      </p>
+    }
+
+    <div class="mt-5">
+      <app-ui-button
+        variant="primary"
+        [disabled]="loading.visible() || images().length === 0"
+        (clicked)="analyze()"
+      >
+        Continuar
+      </app-ui-button>
+    </div>
+  </app-ui-card>
+}
+
+@if (phase() === 'reviewing') {
+  <app-ui-card title="Revise los datos extraídos" [padding]="'md'">
+    <p class="mb-5 text-sm text-muted-foreground">
+      Corrija cualquier dato incorrecto antes de continuar.
+    </p>
+
+    @if (warnings().length) {
+      <ul
+        class="mb-5 flex flex-col gap-1 rounded-md border border-amber-400/40 bg-amber-50 px-3 py-2 dark:bg-amber-900/20"
+      >
+        @for (w of warnings(); track w) {
+          <li class="text-sm text-amber-700 dark:text-amber-300">⚠ {{ w }}</li>
+        }
+      </ul>
+    }
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <app-ui-input label="Nombres" inputId="ocr-nombre" [(value)]="nombre" />
+      <app-ui-input label="Apellido paterno" inputId="ocr-ap" [(value)]="apellidoPaterno" />
+      <app-ui-input label="Apellido materno" inputId="ocr-am" [(value)]="apellidoMaterno" />
+      <app-ui-input label="Número de DNI" inputId="ocr-dni" [(value)]="dniNumber" />
+      <app-ui-input label="Sexo" inputId="ocr-sexo" [(value)]="sexo" />
+      <app-ui-input label="Nacionalidad" inputId="ocr-nac" [(value)]="nacionalidad" />
+      <app-ui-input
+        label="Fecha de nacimiento"
+        inputId="ocr-fn"
+        [(value)]="fechaNacimiento"
+        placeholder="DD/MM/YYYY"
+      />
+      <app-ui-input
+        label="Fecha de vencimiento"
+        inputId="ocr-fe"
+        [(value)]="fechaExpiracion"
+        placeholder="DD/MM/YYYY"
+      />
+      <app-ui-input label="Lugar de nacimiento" inputId="ocr-ln" [(value)]="lugarNacimiento" />
+      <div class="sm:col-span-2">
+        <app-ui-input label="Dirección" inputId="ocr-dir" [(value)]="direccion" />
+      </div>
+    </div>
+
+    @if (error()) {
+      <p
+        class="mt-4 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        role="alert"
+      >
+        {{ error() }}
+      </p>
+    }
+
+    <div class="mt-6 flex gap-3">
+      <app-ui-button variant="primary" [disabled]="loading.visible()" (clicked)="confirm()">
+        @if (mode() === 'prefill') {
+          Usar estos datos
+        } @else {
+          Guardar
+        }
+      </app-ui-button>
+      <app-ui-button variant="ghost" [disabled]="loading.visible()" (clicked)="reset()">
+        Volver a subir
+      </app-ui-button>
+    </div>
+  </app-ui-card>
+}
+
+@if (phase() === 'done' && mode() === 'savePatient') {
+  <app-ui-card title="DNI guardado" [padding]="'md'">
+    <p class="mb-2 text-sm text-muted-foreground">
+      El documento y el paciente han sido registrados correctamente.
+    </p>
+    <dl class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+      <div class="rounded-lg border border-border bg-surface-elevated px-3 py-2">
+        <dt class="font-medium text-muted-foreground">ID documento</dt>
+        <dd class="text-foreground">#{{ savedId() }}</dd>
+      </div>
+      <div class="rounded-lg border border-border bg-surface-elevated px-3 py-2">
+        <dt class="font-medium text-muted-foreground">ID paciente</dt>
+        <dd class="text-foreground">#{{ savedPatientId() }}</dd>
+      </div>
+    </dl>
+    <div class="mt-6">
+      <app-ui-button variant="secondary" (clicked)="reset()">
+        Registrar otro DNI
+      </app-ui-button>
+    </div>
+  </app-ui-card>
+}

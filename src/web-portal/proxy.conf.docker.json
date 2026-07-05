@@ -1,0 +1,23 @@
+{
+  "/api": {
+    "target": "http://service-core:8000",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/nlp": {
+    "target": "http://service-nlp:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/nlp": "/api"
+    }
+  },
+  "/vision": {
+    "target": "http://service-vision:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/vision": "/api"
+    }
+  }
+}

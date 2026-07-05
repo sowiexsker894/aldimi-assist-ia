@@ -212,12 +212,30 @@ Una historia de usuario está "Done" cuando:
 
 ### Requisitos previos
 
-- Python 3.9 o superior
+- Python 3.9 o superior (dev local sin Docker)
 - Git
-- Tesseract OCR ([instalar aquí](https://github.com/tesseract-ocr/tesseract))
-- PostgreSQL (opcional para local)
+- Docker y Docker Compose (recomendado para levantar todo el stack)
+- Tesseract OCR ([instalar aquí](https://github.com/tesseract-ocr/tesseract)) — solo si usas OCR fuera del contenedor
+- PostgreSQL — incluido en Docker Compose; opcional si corres backends en local
 
-### Clonar e instalar
+### Arranque rápido con Docker Compose
+
+Desde la raíz del repositorio:
+
+```bash
+docker compose up --build
+```
+
+| URL | Descripción |
+|-----|-------------|
+| http://localhost:4200 | Portal web (Angular) |
+| http://localhost:8000/docs | API central (Swagger) |
+
+Login de desarrollo (seed migración 002): `admin@aldimi.local` / `AdminDev123!`
+
+Ver [src/context/ecosystem/services-map.md](src/context/ecosystem/services-map.md) para detalle de puertos, proxy y variables.
+
+### Clonar e instalar (dev local sin Docker)
 
 ```bash
 # 1. Clonar el repositorio

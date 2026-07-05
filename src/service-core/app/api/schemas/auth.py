@@ -44,10 +44,30 @@ class CreateVolunteerRequest(BaseModel):
     email: str
     password: str
     full_name: str
+    phone: str | None = None
+    document_number: str | None = None
 
 
 class CreateVolunteerResponse(BaseModel):
     id: int
     email: str
     full_name: str
+    phone: str | None = None
+    document_number: str | None = None
     roles: list[str]
+
+
+class VolunteerRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    email: str
+    full_name: str
+    phone: str | None = None
+    document_number: str | None = None
+    is_active: bool
+    roles: list[str]
+
+
+class UpdateVolunteerStatusRequest(BaseModel):
+    is_active: bool

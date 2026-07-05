@@ -1,10 +1,12 @@
-from typing import Protocol, runtime_checkable
+from typing import Any, Protocol
 
 
-@runtime_checkable
 class VisionClientPort(Protocol):
     """Puerto hacia vision-service (OCR / documentos)."""
 
-    def extract_document_text(self, document_uri: str) -> str:
-        """Solicita extracción de texto a partir de un documento (URI o referencia)."""
-        ...
+    def analyze_document(
+        self,
+        *,
+        document_type: str,
+        images_base64: list[str],
+    ) -> dict[str, Any]: ...

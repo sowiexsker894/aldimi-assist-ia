@@ -58,7 +58,7 @@
               <div
                 class="rounded-2xl rounded-bl-md border border-border bg-surface-elevated px-4 py-2.5 text-sm leading-relaxed text-foreground shadow-[var(--shadow-card)]"
               >
-                {{ line.text }}
+                <markdown class="guest-chat__md" [data]="line.text" />
               </div>
             </div>
           </div>

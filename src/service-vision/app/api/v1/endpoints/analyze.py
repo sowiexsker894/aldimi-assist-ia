@@ -3,13 +3,19 @@ from openai import OpenAIError
 from pydantic import BaseModel, Field, model_validator
 
 from app.api.deps import VisionServiceDep
+from app.schemas.analyze_response import AnalyzeResponse
 from app.schemas.dni_extracted import DniExtracted
-from app.services.vision_exceptions import VisionRequestError
+from app.schemas.document_type import DocumentType
+from app.services.vision_exceptions import VisionRejectedError, VisionRequestError
 
 router = APIRouter()
 
 
 class AnalyzeRequest(BaseModel):
+    document_type: DocumentType = Field(
+        default="dni",
+        description="Tipo de documento esperado: dni, receta o boleta.",
+    )
     hint: str | None = Field(default=None, max_length=2000)
     image_base64: str | None = Field(
         default=None,
@@ -31,10 +37,6 @@ class AnalyzeRequest(BaseModel):
         return self
 
 
-class AnalyzeResponse(BaseModel):
-    data: DniExtracted
-
-
 def _collect_images(body: AnalyzeRequest) -> list[str]:
     merged: list[str] = []
     for raw in body.images_base64:
@@ -48,10 +50,10 @@ def _collect_images(body: AnalyzeRequest) -> list[str]:
 @router.post(
     "/analyze",
     response_model=AnalyzeResponse,
-    summary="Extracción DNI (OpenCV + Azure multimodal)",
+    summary="Extracción documental (OpenCV + gatekeeper + LLM)",
     description=(
-        "Preprocesa una o más imágenes y llama al modelo con el prompt de extractor DNI. "
-        "Errores 400 (entrada), 413 (límites de tamaño), 502 (modelo / JSON inválido)."
+        "Preprocesa imágenes, evalúa gatekeeper (stub), extrae JSON según document_type. "
+        "Errores 400 (entrada), 413 (límites), 422 (gatekeeper), 502 (modelo / JSON inválido)."
     ),
 )
 def post_analyze(
@@ -61,7 +63,15 @@ def post_analyze(
     _ = body.hint
     images = _collect_images(body)
     try:
-        data = svc.extract_dni(images)
+        result = svc.analyze(body.document_type, images)
+    except VisionRejectedError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "status": "rejected",
+                "rejection": {"code": exc.code, "message": exc.message},
+            },
+        ) from exc
     except VisionRequestError as exc:
         raise HTTPException(status_code=exc.status_code, detail=exc.detail) from exc
     except OpenAIError as exc:
@@ -69,4 +79,16 @@ def post_analyze(
             status_code=502,
             detail=str(exc),
         ) from exc
-    return AnalyzeResponse(data=data)
+
+    legacy_data: DniExtracted | None = None
+    if body.document_type == "dni":
+        legacy_data = DniExtracted.model_validate(result.draft)
+
+    return AnalyzeResponse(
+        status="accepted",
+        document_type=result.document_type,
+        draft=result.draft,
+        warnings=result.warnings,
+        metadata=result.metadata,
+        data=legacy_data,
+    )

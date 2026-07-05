@@ -1,6 +1,7 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideMarkdown } from 'ngx-markdown';
 
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { routes } from './app.routes';
@@ -10,5 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
+    provideMarkdown(),
   ],
 };

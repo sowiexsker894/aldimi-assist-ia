@@ -1,0 +1,117 @@
+# ALDIMI-Assist — stack de desarrollo completo
+# Uso: docker compose up --build
+# Portal: http://localhost:4200 | Core API docs: http://localhost:8000/docs
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: aldimi-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: aldimi_core
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aldimi-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aldimi_core"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  service-core:
+    build:
+      context: ./src/service-core
+      dockerfile: Dockerfile
+    container_name: aldimi-service-core
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/aldimi_core
+      VISION_SERVICE_URL: http://service-vision:8000
+      NLP_SERVICE_URL: http://service-nlp:8000
+      CORS_ORIGINS: http://localhost:4200
+      JWT_SECRET: dev-docker-secret-minimum-32-characters-long
+      PROJECT_NAME: ALDIMI service-core
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - aldimi-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  service-nlp:
+    build:
+      context: ./src/service-nlp
+      dockerfile: Dockerfile
+    container_name: aldimi-service-nlp
+    ports:
+      - "8001:8000"
+    environment:
+      PROJECT_NAME: ALDIMI service-nlp
+      CORS_ORIGINS: http://localhost:4200
+      SERVICE_CORE_BASE_URL: http://service-core:8000
+      LLM_PROVIDER: stub
+    networks:
+      - aldimi-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  service-vision:
+    build:
+      context: ./src/service-vision
+      dockerfile: Dockerfile
+    container_name: aldimi-service-vision
+    ports:
+      - "8002:8000"
+    environment:
+      PROJECT_NAME: ALDIMI service-vision
+      CORS_ORIGINS: http://localhost:4200
+      SERVICE_CORE_BASE_URL: http://service-core:8000
+      LLM_PROVIDER: stub
+      GATEKEEPER_PROVIDER: stub
+    networks:
+      - aldimi-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  web-portal:
+    build:
+      context: ./src/web-portal
+      dockerfile: Dockerfile
+    container_name: aldimi-web-portal
+    ports:
+      - "4200:4200"
+    depends_on:
+      service-core:
+        condition: service_healthy
+      service-nlp:
+        condition: service_healthy
+      service-vision:
+        condition: service_healthy
+    networks:
+      - aldimi-net
+
+networks:
+  aldimi-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

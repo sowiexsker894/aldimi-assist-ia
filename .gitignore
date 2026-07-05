@@ -43,6 +43,7 @@ Thumbs.db
 # Variables de entorno y secretos (NO subir nunca)
 .env
 .env.local
+.env.docker
 *.key
 secrets/
 credentials.json
@@ -85,3 +86,5 @@ package-lock.json
 desktop.ini
 
 .cursor/
+src/context/
+src/scripts/

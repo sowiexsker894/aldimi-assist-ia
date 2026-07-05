@@ -1,6 +1,25 @@
+import json
+
 from openai import OpenAI
 
 from app.infrastructure.llm.protocols import VisionCompletionClient
+from app.schemas.document_type import DocumentType
+
+
+_USER_MESSAGES: dict[DocumentType, str] = {
+    "dni": (
+        "Analiza estas imágenes del documento de identidad peruano "
+        "y devuelve solo el JSON indicado en las reglas."
+    ),
+    "receta": (
+        "Analiza estas imágenes de la receta médica "
+        "y devuelve solo el JSON indicado en las reglas."
+    ),
+    "boleta": (
+        "Analiza estas imágenes del comprobante de pago (boleta o recibo) "
+        "y devuelve solo el JSON indicado en las reglas."
+    ),
+}
 
 
 class AzureVisionClient:
@@ -16,17 +35,15 @@ class AzureVisionClient:
             timeout=timeout_seconds,
         )
 
-    def complete_dni_extraction(
-        self, *, system_prompt: str, image_data_urls: list[str]
+    def complete_document_extraction(
+        self,
+        *,
+        document_type: DocumentType,
+        system_prompt: str,
+        image_data_urls: list[str],
     ) -> str:
         user_content: list[object] = [
-            {
-                "type": "text",
-                "text": (
-                    "Analiza estas imágenes del documento de identidad peruano "
-                    "y devuelve solo el JSON indicado en las reglas."
-                ),
-            }
+            {"type": "text", "text": _USER_MESSAGES[document_type]}
         ]
         for url in image_data_urls:
             user_content.append(
