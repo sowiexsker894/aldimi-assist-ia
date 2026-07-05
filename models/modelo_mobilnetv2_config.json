@@ -1,0 +1,26 @@
+{
+  "modelo": "MobileNetV2",
+  "img_size": 224,
+  "clases": [
+    "receta_medica",
+    "dni",
+    "boleta",
+    "ruido"
+  ],
+  "clase_a_id": {
+    "receta_medica": 0,
+    "dni": 1,
+    "boleta": 2,
+    "ruido": 3
+  },
+  "id_a_clase": {
+    "0": "receta_medica",
+    "1": "dni",
+    "2": "boleta",
+    "3": "ruido"
+  },
+  "accuracy_test": 1.0,
+  "loss_test": 0.000159,
+  "total_imagenes_entrenamiento": 3600,
+  "total_imagenes_test": 900
+}
