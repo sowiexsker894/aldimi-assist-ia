@@ -191,6 +191,52 @@ import { UiButton, UiCard, UiInput } from '../../shared/ui';
                       }
                     </div>
                     <p class="text-foreground">{{ r.text_content }}</p>
+
+                    @if (r.sentiment_label || r.sentiment_score !== null || r.alert_flag) {
+                      <div
+                        class="mt-3 rounded-md border border-border bg-surface px-3 py-2 text-xs text-muted-foreground"
+                      >
+                        <p class="mb-1 font-semibold text-foreground">
+                          Análisis emocional
+                        </p>
+                        <p>
+                          Estado:
+                          <span class="font-medium text-foreground">
+                            {{ reportLabelText(r) }}
+                          </span>
+                        </p>
+                        <p>
+                          Riesgo emocional:
+                          <span class="font-medium text-foreground">
+                            {{ reportRiskPercent(r) }}
+                          </span>
+                        </p>
+                        <p>
+                          Alerta:
+                          <span class="font-medium text-foreground">
+                            {{ reportAlertText(r) }}
+                          </span>
+                        </p>
+
+                        @if (reportTopEmotions(r).length) {
+                          <div class="mt-2">
+                            <p class="font-semibold text-foreground">
+                              Emociones principales
+                            </p>
+                            <div class="mt-1 flex flex-wrap gap-2">
+                              @for (emotion of reportTopEmotions(r); track emotion.emotion) {
+                                <span
+                                  class="rounded-full border border-border bg-surface-elevated px-2 py-0.5 text-xs text-foreground"
+                                >
+                                  {{ emotionName(emotion.emotion) }}:
+                                  {{ emotionPercent(emotion.percent) }}
+                                </span>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
                   </li>
                 }
               </ul>
@@ -303,6 +349,55 @@ export class PatientDetailComponent implements OnInit {
       dateStyle: 'medium',
       timeStyle: 'short',
     });
+  }
+
+  protected reportLabelText(report: DailyReportRow): string {
+    return report.sentiment_label || 'sin_analisis';
+  }
+
+  protected reportRiskPercent(report: DailyReportRow): string {
+    const score = report.sentiment_score;
+
+    if (score === null || score === undefined) {
+      return 'No disponible';
+    }
+
+    return `${(score * 100).toFixed(2)}%`;
+  }
+
+  protected reportAlertText(report: DailyReportRow): string {
+    return report.alert_flag ? 'Sí' : 'No';
+  }
+
+  protected reportTopEmotions(report: DailyReportRow) {
+    return report.sentiment_details?.emotions?.slice(0, 3) ?? [];
+  }
+
+  protected emotionName(name: string | null): string {
+    const names: Record<string, string> = {
+      Anticipation: 'Anticipación',
+      Surprise: 'Sorpresa',
+      Anger: 'Ira',
+      Disgust: 'Disgusto',
+      Trust: 'Confianza',
+      Sadness: 'Tristeza',
+      Fear: 'Miedo',
+      Joy: 'Alegría',
+    };
+
+    if (!name) {
+      return 'No identificado';
+    }
+
+    return names[name] ?? name;
+  }
+
+  protected emotionPercent(value: number | null): string {
+    if (value === null || value === undefined) {
+      return 'No disponible';
+    }
+
+    return `${value.toFixed(2)}%`;
   }
 
   private async loadPatient(): Promise<void> {

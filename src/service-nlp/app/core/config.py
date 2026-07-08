@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     openai_chat_model: str = ""
     chat_system_prompt: str = ""
 
+    # Modelo BERT emocional
+    emotion_model_dir: str = "/app/models/emotion_bert"
+    emotion_model_prefix: str = "bert_"
+    emotion_tokenizer_name: str = "bert-base-multilingual-cased"
+    emotion_threshold: float = 0.50
+    emotion_max_length: int = 256
+
     @property
     def cors_origins_list(self) -> list[str]:
         raw = self.cors_origins.strip()
