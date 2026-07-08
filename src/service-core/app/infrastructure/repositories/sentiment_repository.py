@@ -18,6 +18,7 @@ class SentimentReportRepository:
         text_content: str,
         sentiment_score: float | None,
         sentiment_label: str | None,
+        sentiment_details: dict | None = None,
         alert_flag: bool = False,
     ) -> SentimentReport:
         row = SentimentReport(
@@ -26,6 +27,7 @@ class SentimentReportRepository:
             text_content=text_content,
             sentiment_score=sentiment_score,
             sentiment_label=sentiment_label,
+            sentiment_details=sentiment_details,
             alert_flag=alert_flag,
         )
         self._session.add(row)

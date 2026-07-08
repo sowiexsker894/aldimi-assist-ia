@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -16,5 +17,6 @@ class DailyReportRead(BaseModel):
     text_content: str
     sentiment_label: str | None = None
     sentiment_score: float | None = None
+    sentiment_details: dict[str, Any] | None = None
     alert_flag: bool
     created_at: datetime

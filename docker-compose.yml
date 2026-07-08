@@ -60,7 +60,18 @@ services:
       PROJECT_NAME: ALDIMI service-nlp
       CORS_ORIGINS: http://localhost:4200
       SERVICE_CORE_BASE_URL: http://service-core:8000
-      LLM_PROVIDER: stub
+      LLM_PROVIDER: ${LLM_PROVIDER:-stub}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_CHAT_MODEL: ${OPENAI_CHAT_MODEL:-}
+
+      EMOTION_MODEL_DIR: /app/models/emotion_bert
+      EMOTION_MODEL_PREFIX: bert_
+      EMOTION_TOKENIZER_NAME: bert-base-multilingual-cased
+      EMOTION_THRESHOLD: "0.50"
+      EMOTION_MAX_LENGTH: "256"
+    volumes:
+      - ./models/emotion_bert:/app/models/emotion_bert:ro
     networks:
       - aldimi-net
     healthcheck:

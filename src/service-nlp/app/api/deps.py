@@ -1,5 +1,5 @@
 from typing import Annotated
-
+from app.services.emotion_service import EmotionService
 from fastapi import Depends
 
 from app.core.aldimi_system_prompt import ALDIMI_SYSTEM_PROMPT
@@ -21,7 +21,7 @@ def _make_llm(settings: Settings) -> LLMClient:
 
 
 _chat_service: ChatService | None = None
-
+_emotion_service: EmotionService | None = None
 
 def get_chat_service(settings: Annotated[Settings, Depends(get_settings)]) -> ChatService:
     global _chat_service
@@ -35,6 +35,27 @@ def get_chat_service(settings: Annotated[Settings, Depends(get_settings)]) -> Ch
         _chat_service = ChatService(_make_llm(settings), system_prompt=system)
     return _chat_service
 
+def get_emotion_service(settings: Annotated[Settings, Depends(get_settings)]) -> EmotionService:
+    global _emotion_service
+
+    if _emotion_service is None:
+        try:
+            _emotion_service = EmotionService(
+                model_dir=settings.emotion_model_dir,
+                model_prefix=settings.emotion_model_prefix,
+                tokenizer_name=settings.emotion_tokenizer_name,
+                threshold=settings.emotion_threshold,
+                max_length=settings.emotion_max_length,
+            )
+        except Exception as exc:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=f"No se pudo cargar el modelo BERT emocional: {exc}",
+            ) from exc
+
+    return _emotion_service
+
 
 SettingsDep = Annotated[Settings, Depends(get_settings)]
 ChatServiceDep = Annotated[ChatService, Depends(get_chat_service)]
+EmotionServiceDep = Annotated[EmotionService, Depends(get_emotion_service)]

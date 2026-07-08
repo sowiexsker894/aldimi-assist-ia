@@ -140,8 +140,9 @@ def get_sentiment_report_repository(
 def get_daily_report_service(
     patient_repo: Annotated[PatientRepository, Depends(get_patient_repository)],
     report_repo: Annotated[SentimentReportRepository, Depends(get_sentiment_report_repository)],
+    nlp: Annotated[NlpHttpClient, Depends(get_nlp_http_client)],
 ) -> DailyReportService:
-    return DailyReportService(patient_repo, report_repo)
+    return DailyReportService(patient_repo, report_repo, nlp)
 
 
 def get_patient_family_service(

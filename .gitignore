@@ -88,3 +88,9 @@ desktop.ini
 .cursor/
 src/context/
 src/scripts/
+# Modelos locales pesados
+models/emotion_bert/
+models/*.zip
+
+# Variables locales
+.env
